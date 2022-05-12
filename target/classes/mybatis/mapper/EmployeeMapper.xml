@@ -1,0 +1,48 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="top.chriszwz.Hello001.mapper.EmployeeMapper">
+    <resultMap id="EmployeeMap" type="Employee">
+        <association property="department" column="department" javaType="Department" select="getDepartment"/>
+    </resultMap>
+
+    <select id="getDepartment" resultType="Department">
+        select *
+        from department
+        where id = #{department}
+    </select>
+
+    <select id="queryList" resultMap="EmployeeMap">
+        select * from employee
+    </select>
+
+    <insert id="insertEmployee" parameterType="employee">
+        insert into employee values(NULL,#{lastName},#{email},#{gender},#{department.id},#{birth})
+    </insert>
+
+    <update id="updateEmployee" parameterType="employee">
+        update employee
+        set lastName=#{lastName},email=#{email},gender=#{gender},department=#{department.id},birth=#{birth}
+        where id=#{id}
+    </update>
+
+    <!--    通过id查找员工-->
+    <select id="EmployeeById" parameterType="integer" resultMap="EmployeeMap">
+        select *
+        from employee
+        where id = #{id}
+    </select>
+
+<!--    通过姓名查找员工-->
+    <select id="EmployeeByLastName" parameterType="string" resultMap="EmployeeMap">
+        select *
+        from employee
+        where lastName = #{lastName}
+    </select>
+
+    <delete id="deleteById" parameterType="integer">
+        delete from employee where id = #{id}
+    </delete>
+
+</mapper>
